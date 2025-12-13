@@ -1,0 +1,26 @@
+{
+  "name": "carapace-docs",
+  "main": "index.js",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "expo start",
+    "format": "biome format . --write && biome check --write",
+    "format:check": "biome format . && biome check --no-errors-on-unmatched",
+    "lint": "biome lint . --write",
+    "lint:check": "biome lint . --no-errors-on-unmatched",
+    "typecheck": "tsc"
+  },
+  "dependencies": {
+    "@norn-iron/carapace": "workspace:*",
+    "expo": "~54.0.29",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "react-native": "0.81.5"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.3.8",
+    "@types/react": "~19.1.0",
+    "typescript": "~5.9.2"
+  },
+  "private": true
+}

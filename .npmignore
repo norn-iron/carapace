@@ -1,0 +1,30 @@
+# Development files
+*.tsbuildinfo
+tsconfig.json
+biome.json
+
+# Source files (we publish compiled dist/)
+src/
+
+# Docs workspace
+docs/
+
+# Workspace files
+pnpm-workspace.yaml
+
+# Tests and examples
+__tests__/
+__mocks__/
+example/
+
+# Dev dependencies
+node_modules/
+pnpm-lock.yaml
+yarn.lock
+package-lock.json
+
+# Misc
+.DS_Store
+*.log
+.env*
+
