@@ -19,9 +19,7 @@ const getScreenSize = (): ScreenSize => {
   };
 };
 
-export type NornIronBreakpoints = {
-  breakpoints: Record<NornIronMediaBreakpoint, boolean>;
-};
+export type NornIronBreakpoints = Record<NornIronMediaBreakpoint, boolean>;
 
 export const useBreakpoints = (): NornIronBreakpoints => {
   const [screenSize, setScreenSize] = useState<ScreenSize>(getScreenSize());
@@ -39,9 +37,6 @@ export const useBreakpoints = (): NornIronBreakpoints => {
     return () => listener.remove();
   }, [currentBreakpoint]);
 
-  return {
-    breakpoints: Object.fromEntries(
+  return Object.fromEntries(
       Object.keys(BREAKPOINTS).map((breakpoint) => [breakpoint, currentBreakpoint === breakpoint])
-    ) as Record<NornIronMediaBreakpoint, boolean>,
-  };
-};
+    ) as Record<NornIronMediaBreakpoint, boolean>};

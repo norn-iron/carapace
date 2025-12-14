@@ -5,19 +5,23 @@ import {
   createElement,
   type PropsWithChildren,
   useContext,
+  useEffect,
   useMemo,
 } from 'react';
 import type { ImageStyle, TextStyle, ViewStyle } from 'react-native';
 import { type NornIronMediaBreakpoint, useBreakpoints } from '../theme/breakpoints';
 import { type NornIronThemeColors, useColors } from '../theme/colors';
 import { type NornIronFonts, useFonts } from '../theme/fonts';
+import { type NornIronRadius, useRadius } from '../theme/radius';
 import { type NornIronSpacing, useSpacing } from '../theme/spacing';
 import type { DeepPartial } from '../types';
+import { useDarkMode } from './DarkModeProvider';
 
 type NornIronTheme = {
   colors: NornIronThemeColors;
   spacing: NornIronSpacing;
   fonts: NornIronFonts;
+  radius: NornIronRadius;
   breakpoints: Record<NornIronMediaBreakpoint, boolean>;
 };
 
@@ -25,7 +29,7 @@ type NornIronThemeContext = {
   theme: NornIronTheme;
 };
 
-const Context = createContext<NornIronThemeContext | null>(null);
+const ThemeContext = createContext<NornIronThemeContext | null>(null);
 
 export const ThemeProvider = ({
   theme: customTheme,
@@ -35,8 +39,13 @@ export const ThemeProvider = ({
 }) => {
   const fonts = useFonts();
   const spacing = useSpacing();
-  const colors = useColors();
-  const { breakpoints } = useBreakpoints();
+  const darkMode = useDarkMode();
+  useEffect(() => {
+    console.log('🌓 changed in here', darkMode);
+  }, [darkMode]);
+  const colors = useColors(darkMode.isDark);
+  const radius = useRadius();
+  const breakpoints = useBreakpoints();
 
   const contextTheme: NornIronTheme = useMemo(() => {
     const nornIronTheme: NornIronTheme = {
@@ -44,38 +53,32 @@ export const ThemeProvider = ({
       fonts,
       spacing,
       breakpoints,
+      radius,
     };
 
+    console.log('🌓 contextTheme render', { colors, fonts, spacing, breakpoints, radius });
+
     return merge({}, nornIronTheme, customTheme);
-  }, [fonts, spacing, colors, breakpoints, customTheme]);
+  }, [fonts, spacing, colors, radius, breakpoints, customTheme]);
 
-  return <Context.Provider value={{ theme: contextTheme }}>{children}</Context.Provider>;
+  return <ThemeContext.Provider value={{ theme: contextTheme }}>{children}</ThemeContext.Provider>;
 };
 
-export const useTheme = () => {
-  const context = useContext(Context);
-  if (!context) {
-    throw new Error('useTheme must be used within a ThemeProvider');
-  }
-  return context;
-};
+export const styled =
+  <TProps extends { style?: unknown }, TStyle extends ViewStyle | TextStyle | ImageStyle>(
+    Component: ComponentType<TProps>,
+    stylesFn: (theme: NornIronTheme) => TStyle
+  ): ComponentType<TProps> =>
+  ({ style: propsStyle, ...rest }: TProps) => {
+    const context = useContext(ThemeContext);
+    if (context == null) {
+      throw new Error('styled must be used within a ThemeProvider');
+    }
 
-export const styled = <
-  TProps extends { style?: unknown },
-  TStyle extends ViewStyle | TextStyle | ImageStyle,
->(
-  Component: ComponentType<TProps>,
-  stylesFn: (theme: NornIronTheme) => TStyle
-): ComponentType<TProps> => ({ style: propsStyle, ...props }: TProps) => {
-  const themeContext = useTheme();
+    const style = useMemo(
+      () => [stylesFn(context.theme), propsStyle].filter(Boolean),
+      [stylesFn, context, propsStyle]
+    );
 
-  const style = useMemo(
-    () => [stylesFn(themeContext.theme), propsStyle].filter(Boolean),
-    [stylesFn, themeContext, propsStyle]
-  );
-
-  return createElement(
-    Component,
-    { style, ...props } as TProps
-  );
-};
+    return createElement(Component, { style, ...rest } as TProps);
+  };

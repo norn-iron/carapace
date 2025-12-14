@@ -58,6 +58,18 @@ const named = {
     fontWeight: 400,
     lineHeight: 21,
   },
+  bold: {
+    fontWeight: 700,
+  },
+  medium: {
+    fontWeight: 500,
+  },
+  regular: {
+    fontWeight: 400,
+  },
+  light: {
+    fontWeight: 300,
+  },
 };
 
 type NornIronFontName = keyof typeof base | keyof typeof named;
