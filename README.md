@@ -33,10 +33,7 @@ pnpm dev
 pnpm dev:ios
 pnpm dev:android
 pnpm dev:web
-```
 
-**Useful commands**
-```bash
 # lint, format, typecheck
 pnpm sweep
 ```

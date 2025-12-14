@@ -3,7 +3,7 @@
   "main": "index.js",
   "version": "1.0.0",
   "scripts": {
-    "start": "expo start",
+    "start": "expo start --port 3000",
     "format": "biome format . --write && biome check --write",
     "format:check": "biome format . && biome check --no-errors-on-unmatched",
     "lint": "biome lint . --write",

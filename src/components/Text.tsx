@@ -1,7 +1,7 @@
-import { Text as RNText, type TextProps } from 'react-native';
+import { Text as RNText } from 'react-native';
+import { styled } from "../providers/ThemeProvider";
 
-export const Text = ({ children, style, ...props }: TextProps) => (
-  <RNText style={[{ color: 'darkgreen' }, style]} {...props}>
-    {children}
-  </RNText>
-);
+export const Text = styled(RNText, ({ fonts }) => ({
+  ...fonts.body,
+  color: "darkgreen",
+}));
