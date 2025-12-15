@@ -3,7 +3,7 @@ import { styled } from '../providers/ThemeProvider';
 
 export type TextProps = RNTextProps;
 
-export const Text = styled<TextProps>(RNText, ({ fonts, colors }) => ({
+export const Text = styled(RNText, ({ fonts, colors }) => ({
   ...fonts.body,
   color: colors.text.main,
 }));

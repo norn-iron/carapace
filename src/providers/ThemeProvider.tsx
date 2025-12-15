@@ -63,12 +63,27 @@ export const useDarkMode = (): DarkMode => {
   return context;
 };
 
-export const styled =
-  <TProps extends { style?: StyleProp<ViewStyle | TextStyle | ImageStyle> }>(
-    Component: ComponentType<Record<string, unknown>>,
-    stylesFn: (theme: NornIronTheme, props: TProps) => ViewStyle | TextStyle | ImageStyle
-  ): ComponentType<TProps> =>
-  (props: TProps) => {
+// Helper type to extract props from ComponentType
+type ExtractComponentProps<T> = T extends ComponentType<infer P> ? P : never;
+
+// Overload 1: Explicit type parameter provided
+export function styled<TProps extends { style?: StyleProp<ViewStyle | TextStyle | ImageStyle> }>(
+  Component: ComponentType<Partial<TProps> & { style?: StyleProp<ViewStyle | TextStyle | ImageStyle> }>,
+  stylesFn: (theme: NornIronTheme, props: TProps) => ViewStyle | TextStyle | ImageStyle
+): ComponentType<TProps>;
+
+// Overload 2: Infer type from Component
+export function styled<TComponent extends ComponentType<Record<string, unknown>>>(
+  Component: TComponent,
+  stylesFn: (theme: NornIronTheme, props: ExtractComponentProps<TComponent>) => ViewStyle | TextStyle | ImageStyle
+): ComponentType<ExtractComponentProps<TComponent>>;
+
+// Implementation
+export function styled<TProps extends { style?: StyleProp<ViewStyle | TextStyle | ImageStyle> }>(
+  Component: ComponentType<Record<string, unknown>>,
+  stylesFn: (theme: NornIronTheme, props: TProps) => ViewStyle | TextStyle | ImageStyle
+): ComponentType<TProps> {
+  return (props: TProps) => {
     const context = useContext(ThemeContext);
     if (context == null) {
       throw new Error('styled must be used within a ThemeProvider');
@@ -78,6 +93,7 @@ export const styled =
 
     return createElement(Component, { ...props, style });
   };
+}
 
 const DarkModeProvider = ({ children }: PropsWithChildren) => {
   const systemDarkMode = useColorScheme();
