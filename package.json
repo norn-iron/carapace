@@ -1,6 +1,6 @@
 {
   "name": "@norn-iron/carapace",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "React Native component library",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
