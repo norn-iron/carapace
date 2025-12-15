@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useMemo, useState } from 'react';
-import type { DarkModeOption } from '../providers/DarkModeProvider';
+import type { DarkModeOption } from '../providers/ThemeProvider';
 
 // How to setup custom storage keys 👇
 // -----------------------------

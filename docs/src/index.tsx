@@ -1,5 +1,13 @@
-import { NornIronProvider, styled, useDarkMode } from '@norn-iron/carapace';
-import { Button, Text, View } from 'react-native';
+import {
+  Button,
+  Divider,
+  Flex,
+  NornIronProvider,
+  styled,
+  Text,
+  useDarkMode,
+} from '@norn-iron/carapace';
+import type { FlexProps } from '../../dist/components/Flex';
 
 export const CarapaceDocs = () => (
   <NornIronProvider>
@@ -9,43 +17,50 @@ export const CarapaceDocs = () => (
 
 const App = () => {
   const { darkMode, setDarkMode } = useDarkMode();
+
   return (
     <Screen>
-      <Box>
-        <BodyText>docs/index.tsx</BodyText>
+      <Container>
+        <Text>docs/index.tsx</Text>
+        <Divider mb="xxsmall" />
         <Button
-          title={`Light theme ${darkMode === 'light' ? '✅' : ''}`}
+          grow
           onPress={() => setDarkMode('light')}
-        />
+          variant={darkMode === 'light' ? 'solid' : 'outlined'}
+        >
+          Light
+        </Button>
         <Button
-          title={`Dark theme ${darkMode === 'dark' ? '✅' : ''}`}
+          grow
           onPress={() => setDarkMode('dark')}
-        />
+          variant={darkMode === 'dark' ? 'solid' : 'outlined'}
+        >
+          Dark
+        </Button>
         <Button
-          title={`System theme ${darkMode === 'system' ? '✅' : ''}`}
+          grow
           onPress={() => setDarkMode('system')}
-        />
-      </Box>
+          variant={darkMode === 'system' ? 'solid' : 'outlined'}
+        >
+          System
+        </Button>
+      </Container>
     </Screen>
   );
 };
 
-const Screen = styled(View, ({ colors }) => ({
+const Screen = styled<FlexProps>(Flex, ({ colors }) => ({
   flex: 1,
   backgroundColor: colors.background.variant,
   justifyContent: 'center',
   alignItems: 'center',
 }));
 
-const Box = styled(View, ({ colors, spacing, radius }) => ({
-  backgroundColor: colors.background.main,
+const Container = styled<FlexProps>(Flex, ({ colors, spacing }) => ({
+  maxWidth: 1000,
+  width: '100%',
+  backgroundColor: colors.background.variant,
   paddingHorizontal: spacing.large,
   paddingVertical: spacing.small,
-  borderRadius: radius.small,
-}));
-
-const BodyText = styled(Text, ({ fonts, colors }) => ({
-  ...fonts.body,
-  ...fonts.bold,
-  color: colors.text.subdued,
+  gap: spacing.small,
 }));

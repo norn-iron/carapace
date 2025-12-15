@@ -1,7 +1,4 @@
-import { useMemo } from "react";
-import { logger } from "../logger";
-
-const palette = {
+export const colorPalette = {
   white: '#ffffff',
   black: '#000000',
   gray: {
@@ -126,18 +123,26 @@ const palette = {
   },
 };
 
+const nornIronColors = {
+  primary: colorPalette.green[800],
+  onPrimary: colorPalette.white,
+  secondary: colorPalette.yellow[800],
+  onSecondary: colorPalette.white,
+}
+
 const lightTheme = {
   background: {
-    bright: palette.white,
-    variant: palette.gray[200],
-    main: palette.gray[100],
-    subdued: palette.gray[300],
+    main: colorPalette.gray[100],
+    variant: colorPalette.gray[300],
+    primary: nornIronColors.primary,
   },
   text: {
-    bright: palette.black,
-    variant: palette.gray[800],
-    main: palette.gray[900],
-    subdued: palette.gray[700],
+    main: colorPalette.gray[900],
+    variant: colorPalette.gray[700],
+    primary: nornIronColors.primary,
+    secondary: nornIronColors.secondary,
+    onPrimary: nornIronColors.onPrimary,
+    onSecondary: nornIronColors.onSecondary,
   },
 };
 
@@ -145,23 +150,21 @@ export type NornIronThemeColors = typeof lightTheme;
 
 const darkTheme: NornIronThemeColors = {
   background: {
-    main: palette.gray[900],
-    variant: palette.gray[700],
-    bright: palette.gray[600],
-    subdued: palette.gray[800],
+    main: colorPalette.gray[900],
+    variant: colorPalette.gray[700],
+    primary: nornIronColors.primary,
   },
   text: {
-    bright: palette.white,
-    variant: palette.gray[100],
-    main: palette.gray[200],
-    subdued: palette.gray[400],
+    main: colorPalette.gray[200],
+    variant: colorPalette.gray[100],
+    primary: nornIronColors.primary,
+    secondary: nornIronColors.secondary,
+    onPrimary: nornIronColors.onPrimary,
+    onSecondary: nornIronColors.onSecondary,
   },
 };
 
-export const useColors = (isDark: boolean): NornIronThemeColors => {
-  return useMemo(() => {
-    const theme = isDark ? darkTheme : lightTheme;
-    logger.log("🌓 theme changed", { theme });
-    return theme;
-  }, [isDark]);
-};
+export const colors = {
+  light: lightTheme as NornIronThemeColors,
+  dark: darkTheme as NornIronThemeColors,
+}
