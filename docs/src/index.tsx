@@ -1,13 +1,5 @@
-import {
-  Button,
-  Divider,
-  Flex,
-  NornIronProvider,
-  styled,
-  Text,
-  useDarkMode,
-} from '@norn-iron/carapace';
-import type { FlexProps } from '../../dist/components/Flex';
+import { NornIronProvider, Screen, Text, useDarkMode } from '@norn-iron/carapace';
+import { NavigationBar } from '../../dist/components/NavigationBar';
 
 export const CarapaceDocs = () => (
   <NornIronProvider>
@@ -17,50 +9,19 @@ export const CarapaceDocs = () => (
 
 const App = () => {
   const { darkMode, setDarkMode } = useDarkMode();
-
   return (
-    <Screen>
-      <Container>
+    <>
+      <Screen justify="center" align="center">
         <Text>docs/index.tsx</Text>
-        <Divider mb="xxsmall" />
-        <Button
-          grow
-          onPress={() => setDarkMode('light')}
-          variant={darkMode === 'light' ? 'solid' : 'outlined'}
-        >
-          Light
-        </Button>
-        <Button
-          grow
-          onPress={() => setDarkMode('dark')}
-          variant={darkMode === 'dark' ? 'solid' : 'outlined'}
-        >
-          Dark
-        </Button>
-        <Button
-          grow
-          onPress={() => setDarkMode('system')}
-          variant={darkMode === 'system' ? 'solid' : 'outlined'}
-        >
-          System
-        </Button>
-      </Container>
-    </Screen>
+      </Screen>
+      <NavigationBar
+        active={darkMode}
+        items={[
+          { key: 'light', label: 'Light', onPress: () => setDarkMode('light') },
+          { key: 'dark', label: 'Dark', onPress: () => setDarkMode('dark') },
+          { key: 'system', label: 'System', onPress: () => setDarkMode('system') },
+        ]}
+      />
+    </>
   );
 };
-
-const Screen = styled<FlexProps>(Flex, ({ colors }) => ({
-  flex: 1,
-  backgroundColor: colors.background.main,
-  justifyContent: 'center',
-  alignItems: 'center',
-}));
-
-const Container = styled<FlexProps>(Flex, ({ colors, spacing }) => ({
-  maxWidth: 1000,
-  width: '100%',
-  backgroundColor: colors.background.main,
-  paddingHorizontal: spacing.large,
-  paddingVertical: spacing.small,
-  gap: spacing.small,
-}));
