@@ -1,6 +1,6 @@
 {
   "name": "@norn-iron/carapace",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "React Native component library",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -22,19 +22,23 @@
     "format:check": "biome format . && biome check --no-errors-on-unmatched",
     "lint": "biome lint . --write",
     "lint:check": "biome lint . --no-errors-on-unmatched",
-    "typecheck": "tsc",
+    "typecheck": "tsc --noEmit",
     "check-version": "bash scripts/check-version-bump.sh",
-    "sweep": "pnpm -r format && pnpm -r lint && pnpm -r typecheck",
-    "sweep:check": "pnpm -r format:check && pnpm -r lint:check && pnpm -r typecheck"
+    "sweep": "pnpm format && pnpm -r --filter='./docs' format && pnpm -r lint && pnpm -r typecheck",
+    "sweep:check": "pnpm format:check && pnpm -r --filter='./docs' format:check && pnpm -r lint:check && pnpm -r typecheck"
   },
   "peerDependencies": {
     "react": ">=18.0.0",
     "react-native": ">=0.70.0"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@react-native-async-storage/async-storage": "^2.2.0",
+    "lodash": "^4.17.21"
+  },
   "devDependencies": {
     "@babel/core": "^7.20.0",
     "@biomejs/biome": "^2.3.8",
+    "@types/lodash": "^4.17.21",
     "@types/react": "~19.1.0",
     "expo": "~54.0.27",
     "react": "19.1.0",

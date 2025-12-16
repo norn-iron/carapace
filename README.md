@@ -2,25 +2,62 @@
 
 A React Native component library
 
-### Installation
+### ⬇️ Installation
 
 ```bash
 pnpm add @norn-iron/carapace
 ```
 
-### Usage
-
 ```tsx
-import { Column, Text } from '@norn-iron/carapace';
+import { NornIronProvider, useDarkMode, Flex, Text } from '@norn-iron/carapace';
 
-const App = () => (
-  <Column alignItems="center" justifyContent="center">
-    <Text>Hello, world!</Text>
-  </Column>
+export const App = () => (
+  // Wrap your app in the NornIronProvider
+  <NornIronProvider
+    // Optionally provide your own theme for tweaking colors/sizes etc
+    theme={customTheme}
+  >
+    <YourNextApp />
+  </NornIronProvider>
 );
+
+const YourNextApp = () => {
+  // Access to NornIron hooks
+  const { isDark } = useDarkMode();
+
+  // Access to NornIron components
+  return (
+    <Flex>
+      <Text>Hello, world!</Text>
+    </Flex>
+  )
+}
 ```
 
-### Dev
+### 🎨 Styled components
+
+```tsx
+import { styled, Flex, Text, type FlexProps } from '@norn-iron/carapace';
+
+export const MyComponent = () => (
+  <Container variant="bordered">
+    <Text>Hello, world!</Text>
+  </Container>
+);
+
+type ContainerProps = FlexProps & {
+  variant?: "default" | "bordered"
+}
+
+const Container = styled<ContainerProps>(Flex, (theme, props) => ({
+  paddingHorizontal: theme.spacing.medium,
+  paddingVertical: theme.spacing.small,
+  backgroundColor: theme.colors.background.main,
+  borderWidth: props.variant === "bordered" ? 1 : 0
+}));
+```
+
+### 💻 Dev
 
 ```bash
 # install dependencies
@@ -33,10 +70,7 @@ pnpm dev
 pnpm dev:ios
 pnpm dev:android
 pnpm dev:web
-```
 
-**Useful commands**
-```bash
 # lint, format, typecheck
 pnpm sweep
 ```
@@ -44,3 +78,7 @@ pnpm sweep
 ## License
 
 UNLICENSED (for now)
+
+---
+
+☘️ Made in Northern Ireland ☘️
