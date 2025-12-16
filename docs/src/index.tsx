@@ -8,19 +8,9 @@ import {
   useDarkMode,
 } from '@norn-iron/carapace';
 import type { FlexProps } from '../../dist/components/Flex';
-import type { NornIronProviderProps } from '../../dist/providers/NornIronProvider';
-
-const USE_CUSTOM_THEME = false;
-
-const customTheme: NornIronProviderProps['theme'] = {
-  colors: {
-    light: { background: { main: '#6b9c3d' }, text: { main: '#1a3009' } },
-    dark: { background: { main: '#1a3009' }, text: { main: '#6b9c3d' } },
-  },
-};
 
 export const CarapaceDocs = () => (
-  <NornIronProvider theme={USE_CUSTOM_THEME ? customTheme : undefined}>
+  <NornIronProvider>
     <App />
   </NornIronProvider>
 );

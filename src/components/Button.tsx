@@ -25,7 +25,7 @@ const Touchable = styled<ButtonProps>(
     alignSelf: grow ? 'stretch' : undefined,
     paddingHorizontal: spacing.medium,
     paddingVertical: spacing.small,
-    borderRadius: radius.small,
+    borderRadius: radius.medium,
     ...(variant === 'outlined' && {
       backgroundColor: 'transparent',
       borderWidth: 1,
