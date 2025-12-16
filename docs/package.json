@@ -8,7 +8,7 @@
     "format:check": "biome format . && biome check --no-errors-on-unmatched",
     "lint": "biome lint . --write",
     "lint:check": "biome lint . --no-errors-on-unmatched",
-    "typecheck": "tsc"
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "@norn-iron/carapace": "workspace:*",

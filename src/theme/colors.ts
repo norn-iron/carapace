@@ -123,26 +123,12 @@ export const colorPalette = {
   },
 };
 
-const nornIronColors = {
-  primary: colorPalette.green[800],
-  onPrimary: colorPalette.white,
-  secondary: colorPalette.yellow[800],
-  onSecondary: colorPalette.white,
-}
-
 const lightTheme = {
   background: {
     main: colorPalette.gray[100],
-    variant: colorPalette.gray[300],
-    primary: nornIronColors.primary,
   },
   text: {
-    main: colorPalette.gray[900],
-    variant: colorPalette.gray[700],
-    primary: nornIronColors.primary,
-    secondary: nornIronColors.secondary,
-    onPrimary: nornIronColors.onPrimary,
-    onSecondary: nornIronColors.onSecondary,
+    main: colorPalette.green[800],
   },
 };
 
@@ -150,21 +136,14 @@ export type NornIronThemeColors = typeof lightTheme;
 
 const darkTheme: NornIronThemeColors = {
   background: {
-    main: colorPalette.gray[900],
-    variant: colorPalette.gray[700],
-    primary: nornIronColors.primary,
+    main: colorPalette.green[800],
   },
   text: {
     main: colorPalette.gray[200],
-    variant: colorPalette.gray[100],
-    primary: nornIronColors.primary,
-    secondary: nornIronColors.secondary,
-    onPrimary: nornIronColors.onPrimary,
-    onSecondary: nornIronColors.onSecondary,
   },
 };
 
 export const colors = {
   light: lightTheme as NornIronThemeColors,
   dark: darkTheme as NornIronThemeColors,
-}
+};

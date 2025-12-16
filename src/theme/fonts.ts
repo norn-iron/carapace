@@ -75,4 +75,5 @@ const named = {
 type NornIronFontName = keyof typeof base | keyof typeof named;
 export type NornIronFonts = Record<NornIronFontName, TextStyle>;
 
-export const useFonts = () => useMemo<NornIronFonts>(() => ({ ...base, ...named } as NornIronFonts), []);
+export const useFonts = () =>
+  useMemo<NornIronFonts>(() => ({ ...base, ...named }) as NornIronFonts, []);

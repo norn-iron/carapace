@@ -1,6 +1,10 @@
 import type { PropsWithChildren } from 'react';
-import { ThemeProvider } from './ThemeProvider';
+import { ThemeProvider, type ThemeProviderProps } from './ThemeProvider';
 
-export const NornIronProvider = ({ children }: PropsWithChildren) => {
-  return <ThemeProvider>{children}</ThemeProvider>
+export type NornIronProviderProps = {
+  theme?: ThemeProviderProps;
+};
+
+export const NornIronProvider = ({ theme, children }: PropsWithChildren<NornIronProviderProps>) => {
+  return <ThemeProvider {...theme}>{children}</ThemeProvider>;
 };

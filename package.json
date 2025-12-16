@@ -22,10 +22,10 @@
     "format:check": "biome format . && biome check --no-errors-on-unmatched",
     "lint": "biome lint . --write",
     "lint:check": "biome lint . --no-errors-on-unmatched",
-    "typecheck": "tsc",
+    "typecheck": "tsc --noEmit",
     "check-version": "bash scripts/check-version-bump.sh",
-    "sweep": "pnpm -r format && pnpm -r lint && pnpm -r typecheck",
-    "sweep:check": "pnpm -r format:check && pnpm -r lint:check && pnpm -r typecheck"
+    "sweep": "pnpm format && pnpm -r --filter='./docs' format && pnpm -r lint && pnpm -r typecheck",
+    "sweep:check": "pnpm format:check && pnpm -r --filter='./docs' format:check && pnpm -r lint:check && pnpm -r typecheck"
   },
   "peerDependencies": {
     "react": ">=18.0.0",

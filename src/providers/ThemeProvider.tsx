@@ -15,7 +15,11 @@ import {
   type ViewStyle,
 } from 'react-native';
 import { useStorage } from '../hooks/useStorage';
-import { type NornIronMediaBreakpoint, useBreakpoints } from '../theme/breakpoints';
+import {
+  type NornIronBreakpoints,
+  type NornIronMediaBreakpoint,
+  useBreakpoints,
+} from '../theme/breakpoints';
 import { colors, type NornIronThemeColors } from '../theme/colors';
 import { type NornIronFonts, useFonts } from '../theme/fonts';
 import { type NornIronRadius, useRadius } from '../theme/radius';
@@ -45,11 +49,17 @@ type DarkMode = {
 const DarkModeContext = createContext<DarkMode | null>(null);
 const ThemeContext = createContext<NornIronThemeContext | null>(null);
 
-type ThemeProviderProps = PropsWithChildren & {
-  theme?: DeepPartial<NornIronTheme>;
+export type ThemeProviderProps = {
+  colors?:
+    | DeepPartial<NornIronThemeColors>
+    | { light: DeepPartial<NornIronThemeColors>; dark: DeepPartial<NornIronThemeColors> };
+  fonts?: DeepPartial<NornIronFonts>;
+  spacing?: DeepPartial<NornIronSpacing>;
+  radius?: DeepPartial<NornIronRadius>;
+  breakpoints?: DeepPartial<NornIronBreakpoints>;
 };
 
-export const ThemeProvider = (props: ThemeProviderProps) => (
+export const ThemeProvider = (props: PropsWithChildren<ThemeProviderProps>) => (
   <DarkModeProvider>
     <InnerThemeProvider {...props} />
   </DarkModeProvider>
@@ -68,14 +78,19 @@ type ExtractComponentProps<T> = T extends ComponentType<infer P> ? P : never;
 
 // Overload 1: Explicit type parameter provided
 export function styled<TProps extends { style?: StyleProp<ViewStyle | TextStyle | ImageStyle> }>(
-  Component: ComponentType<Partial<TProps> & { style?: StyleProp<ViewStyle | TextStyle | ImageStyle> }>,
+  Component: ComponentType<
+    Partial<TProps> & { style?: StyleProp<ViewStyle | TextStyle | ImageStyle> }
+  >,
   stylesFn: (theme: NornIronTheme, props: TProps) => ViewStyle | TextStyle | ImageStyle
 ): ComponentType<TProps>;
 
 // Overload 2: Infer type from Component
 export function styled<TComponent extends ComponentType<Record<string, unknown>>>(
   Component: TComponent,
-  stylesFn: (theme: NornIronTheme, props: ExtractComponentProps<TComponent>) => ViewStyle | TextStyle | ImageStyle
+  stylesFn: (
+    theme: NornIronTheme,
+    props: ExtractComponentProps<TComponent>
+  ) => ViewStyle | TextStyle | ImageStyle
 ): ComponentType<ExtractComponentProps<TComponent>>;
 
 // Implementation
@@ -113,24 +128,63 @@ const DarkModeProvider = ({ children }: PropsWithChildren) => {
   );
 };
 
-const InnerThemeProvider = ({ theme: customTheme, children }: ThemeProviderProps) => {
+const InnerThemeProvider = ({
+  colors: customColors,
+  fonts,
+  spacing,
+  radius,
+  breakpoints: customBreakpoints,
+  children,
+}: PropsWithChildren<ThemeProviderProps>) => {
   const { isDark } = useDarkMode();
-  const fonts = useFonts();
-  const spacing = useSpacing();
-  const radius = useRadius();
-  const breakpoints = useBreakpoints();
+  const defaultFonts = useFonts();
+  const defaultSpacing = useSpacing();
+  const defaultRadius = useRadius();
+  const breakpoints = useBreakpoints(customBreakpoints as NornIronBreakpoints | undefined);
+
+  const lightColors =
+    customColors == null
+      ? colors.light
+      : 'light' in customColors
+        ? customColors.light
+        : customColors;
+
+  const darkColors =
+    customColors == null ? colors.dark : 'dark' in customColors ? customColors.dark : customColors;
 
   const contextTheme: NornIronTheme = useMemo(() => {
-    const nornIronTheme: NornIronTheme = {
+    const baseTheme: NornIronTheme = {
       colors: colors[isDark ? 'dark' : 'light'],
-      fonts,
-      spacing,
+      fonts: defaultFonts,
+      spacing: defaultSpacing,
       breakpoints,
-      radius,
+      radius: defaultRadius,
     };
 
-    return merge({}, nornIronTheme, customTheme);
-  }, [fonts, spacing, isDark, radius, breakpoints, customTheme]);
+    return merge({}, baseTheme, {
+      colors: isDark
+        ? darkColors
+          ? merge({}, colors.dark, darkColors)
+          : colors.dark
+        : lightColors
+          ? merge({}, colors.light, lightColors)
+          : colors.light,
+      fonts: fonts ? merge({}, defaultFonts, fonts) : defaultFonts,
+      spacing: spacing ? merge({}, defaultSpacing, spacing) : defaultSpacing,
+      radius: radius ? merge({}, defaultRadius, radius) : defaultRadius,
+    }) as NornIronTheme;
+  }, [
+    fonts,
+    spacing,
+    isDark,
+    radius,
+    breakpoints,
+    lightColors,
+    darkColors,
+    defaultFonts,
+    defaultSpacing,
+    defaultRadius,
+  ]);
 
   return <ThemeContext.Provider value={{ theme: contextTheme }}>{children}</ThemeContext.Provider>;
 };
