@@ -9,42 +9,51 @@ pnpm add @norn-iron/carapace
 ```
 
 ```tsx
-import { NornIronProvider, useDarkMode } from '@norn-iron/carapace';
+import { NornIronProvider, useDarkMode, Flex, Text } from '@norn-iron/carapace';
 
 export const App = () => (
-  // Wrap your app in NornIronProvider
-  <NornIronProvider>
-    <MyComponent />
+  // Wrap your app in the NornIronProvider
+  <NornIronProvider
+    // Optionally provide your own theme for tweaking colors/sizes etc
+    theme={customTheme}
+  >
+    <YourNextApp />
   </NornIronProvider>
 );
 
-const MyComponent = () => {
-  // Access to NornIron components and hooks etc
+const YourNextApp = () => {
+  // Access to NornIron hooks
   const { isDark } = useDarkMode();
+
+  // Access to NornIron components
+  return (
+    <Flex>
+      <Text>Hello, world!</Text>
+    </Flex>
+  )
 }
 ```
 
-### 🎨 Theming / Styled components
+### 🎨 Styled components
 
 ```tsx
-import { View, Text } from 'react-native';
-import { styled } from '@norn-iron/carapace';
+import { styled, Flex, Text, type FlexProps } from '@norn-iron/carapace';
 
 export const MyComponent = () => (
-  <Container>
-    <Heading>Hello, world!</Heading>
+  <Container variant="bordered">
+    <Text>Hello, world!</Text>
   </Container>
 );
 
-const Container = styled(View, ({ spacing, colors }) => ({
-  paddingHorizontal: spacing.medium,
-  paddingVertical: spacing.small,
-  backgroundColor: colors.background.main
-}));
+type ContainerProps = FlexProps & {
+  variant?: "default" | "bordered"
+}
 
-const Heading = styled(Text, ({ fonts, colors }) => ({
-  ...fonts.heading,
-  color: colors.text.main
+const Container = styled<ContainerProps>(Flex, (theme, props) => ({
+  paddingHorizontal: theme.spacing.medium,
+  paddingVertical: theme.spacing.small,
+  backgroundColor: theme.colors.background.main,
+  borderWidth: props.variant === "bordered" ? 1 : 0
 }));
 ```
 
